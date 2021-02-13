@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 import InputText from '../../components/InputText';
 import SaveButton from '../../components/SaveButton';
 import UserList from '../../components/UserList';
@@ -6,6 +7,12 @@ import UserContext from "../../state/user/UserContext";
 import { toast } from "react-toastify";
 import { checkIfInputsAreEmpty, getGreeting } from '../../helpers/tools';
 import './style.css';
+
+/**
+ * Displays the main view of the app
+ * @param  {object} languageApp object language that have all parameter
+ * @param  {greeting[]} greeting list grreting by language
+*/
 
 const Home = ({ languageApp, greeting }) => {
   const { postUser, getUsers, users } = useContext(UserContext);
@@ -65,5 +72,15 @@ const Home = ({ languageApp, greeting }) => {
     </>
   )
 }
+
+Home.propTypes = {
+  languageApp: PropTypes.object,
+  greeting: PropTypes.array,
+};
+
+Home.defaultProps = {
+  languageApp: {},
+  greeting: [],
+};
 
 export default Home;

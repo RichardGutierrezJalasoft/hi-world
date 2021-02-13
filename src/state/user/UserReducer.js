@@ -1,4 +1,12 @@
 import { GET_USERS } from './UserType';
+/**
+ * Set result of the get users in the store
+ * @param {Object} state the current state
+ * @param {Object} action contains the payload
+ * * @param {Object} action.payload contains the object which also
+ * * contains the information about the user
+ */
+
 const setUser = function (state, payload) {
   const users = payload;
   return {
