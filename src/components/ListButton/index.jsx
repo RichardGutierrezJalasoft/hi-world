@@ -1,30 +1,26 @@
 import React from 'react'
-import Dropdown from 'react-bootstrap/Dropdown';
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 const ListButton = ({ values, action }) => {
   const [{ language: defaultTitle }] = values;
   return (
-    <Dropdown >
-      <Dropdown.Toggle variant="info" id="dropdown-basic">
-        {defaultTitle}
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
+    <Nav className="navbar-nav  ml-auto">
+      <NavDropdown title={defaultTitle} id="basic-nav-dropdown">
         {
           Boolean(values) && values.map((value) =>
           (
-            <Dropdown.Item
+            <NavDropdown.Item
               id={value}
               key={value.language}
               className={value}
-              onClick={() => action()}>
+              onClick={(e) => action(value.code, e)}>
               {value.language}
-            </Dropdown.Item>
+            </NavDropdown.Item>
           )
           )
         }
-
-      </Dropdown.Menu>
-    </Dropdown >
+      </NavDropdown>
+    </Nav>
   )
 }
 

@@ -1,49 +1,65 @@
-import React from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import InputText from '../../components/InputText';
 import SaveButton from '../../components/SaveButton';
 import UserList from '../../components/UserList';
+import UserContext from "../../state/user/UserContext";
+import { toast } from "react-toastify";
+import { checkIfInputsAreEmpty, getGreeting } from '../../helpers/tools';
+import './style.css';
 
-const Home = () => {
-  const dataEnglish = {
-    title: 'Enter a name',
-    desscription: 'Enter a name to say hello :)',
-    titleButtonSave: 'Send',
-    titleDefaultList: 'Upps we do not have users to say hello',
-    titleList: 'Full Name',
-    descriptionList: 'Greetings',
-  }
-  const dataUser = [
-    {
-      name: 'Lucas',
-      greeting: 'Hello'
-    },
-    {
-      name: 'Margarret',
-      greeting: 'Good morning'
-    },
-    {
-      name: 'Morgant',
-      greeting: 'Bye bye '
+const Home = ({ languageApp, greeting }) => {
+  const { postUser, getUsers, users } = useContext(UserContext);
+  const [user, setUser] = useState({ name: '', message: 0 });
+  const sendGood = () => toast.success(languageApp.sendGood);
+  const sendBad = () => toast.error(languageApp.sendBad);
+  const handleChange = (prop, value) => {
+    setUser({ ...user, [prop]: value });
+  };
+
+  const saveUser = (e) => {
+    e.preventDefault();
+    if (!checkIfInputsAreEmpty(user.name)) {
+      return sendBad()
     }
-  ];
+    user.message = getGreeting();
+    if (postUser(user)) {
+      sendGood();
+    }
+    setUser({ name: '', message: 0 });
+  }
+  const USER_NAME = 'name';
 
-  const text = dataEnglish;
+  useEffect(() => {
+    getUsers();
+  }, [])
   const colorButton = 'success';
-  const titleButton = text.titleButtonSave;
+  const titleButton = languageApp.titleButtonSave;
   return (
     <>
-      <div className='d-flex justify-content-center align-items-center'>
-        <InputText title={text.title} description={text.desscription} />
+      <div className='sendGreeting'>
+        <InputText
+          title={languageApp.title}
+          description={languageApp.desscription}
+          handleChange={handleChange}
+          text={user.name}
+          textKey={USER_NAME}
+          className="inputText"
+        />
         <div className="mt-5 ml-3 pt-4">
-          <SaveButton color={colorButton} title={titleButton} />
+          <SaveButton
+            color={colorButton}
+            title={titleButton}
+            acction={saveUser}
+          />
         </div>
       </div>
       <div className="container">
         <UserList
-          title={text.titleList}
-          description={text.descriptionList}
-          list={dataUser}
-          defaultDescription={text.titleDefaultList}
+          title={languageApp.titleList}
+          description={languageApp.descriptionList}
+          list={users}
+          defaultDescription={languageApp.titleDefaultList}
+          greeting={greeting}
         />
       </div>
     </>
